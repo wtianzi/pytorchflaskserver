@@ -76,3 +76,56 @@ public static async Task SendAliveMessageAsync(string folder, int index)
 ML.NET package enables the training and inference in c#. But currently, the ML.NET doesn't support 3D convTrans, which we need for this model, so we can't use the ML.NET.
 
 If you have a 1D or 2D model, try the ML.NET NuGet Packages, use the detect object model. Makesure you change the class.
+```c#
+// modifed based on the ml.net sample OnnxObjectDetectionApp.
+private void button1_Click(object sender, RoutedEventArgs e)
+{
+    OpenFileDialog openFileDialog = new OpenFileDialog();
+    if (openFileDialog.ShowDialog() == true)
+    {
+        var bitmap = new BitmapImage(new Uri(openFileDialog.FileName));
+        image.Source = bitmap;
+        var frame = new ImageInputData { Image = BitmapImage2Bitmap(bitmap) };
+
+        var mlContext = new MLContext();
+
+        var eyegazeModel = new EyegazeModel(model_name);
+
+        var dataView = mlContext.Data.LoadFromEnumerable(new List<eyegazeInputData>());
+
+        var pipeline = mlContext.Transforms.ApplyOnnxModel(modelFile: eyegazeModel.ModelPath, outputColumnName: eyegazeModel.ModelOutput, inputColumnName: eyegazeModel.ModelInput);
+        var mlNetModel = pipeline.Fit(dataView);
+
+        mlContext.Model.CreatePredictionEngine<ImageInputData[], List<eyegazeInputData>>(mlNetModel);
+
+        var results = eyegazePredictionEngine?.Predict(imageInputData).PredictedLabels;
+    }
+
+}
+public class EyegazeModel : IOnnxModel
+{
+    public string ModelPath { get; private set; }
+
+    public string ModelInput { get; } = "input";
+    public string ModelOutput { get; } = "output";
+
+    public EyegazeModel(string modelPath)
+    {
+        ModelPath = modelPath;
+    }
+}
+
+public class eyegazePrediction : IOnnxObjectPrediction
+{
+    [ColumnName("output")]
+    public float[] PredictedLabels { get; set; }
+}
+
+public class eyegazeInputData
+{
+    [ColumnName("input")]
+    [VectorType(1,3,16,64,64)]
+    public Single[] input { get; set; }
+}
+
+```
