@@ -12,7 +12,7 @@ To load a trained model in the app.py, you need the model structure and the mode
 
 To run a flask for remote connection: `flask run --host 0.0.0.0`
 
-## Python client:
+## Python client (/linuxserver/app.py):
 ```python
 import requests
 test_url = 'http://serveripaddress:5000/predict'
@@ -34,7 +34,7 @@ resp = requests.post(test_url,files={"file": open('0.bmp','rb')})
 print(resp.json())
 ```
 
-## C# client
+## C# client(/requests/request.py):
 ```c#
 public static void SendToModel(string folder, int index)
 {            
@@ -76,6 +76,7 @@ public static async Task SendAliveMessageAsync(string folder, int index)
 ML.NET package enables the training and inference in c#. But currently, the ML.NET doesn't support 3D convTrans, which we need for this model, so we can't use the ML.NET.
 
 If you have a 1D or 2D model, try the ML.NET NuGet Packages, use the detect object model. Makesure you change the class.
+## C# ML.NET application sample (/request/ithrive.xmal_v2.cs):
 ```c#
 // modifed based on the ml.net sample OnnxObjectDetectionApp.
 private void button1_Click(object sender, RoutedEventArgs e)
