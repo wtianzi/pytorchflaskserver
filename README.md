@@ -7,7 +7,7 @@ Given a trained model modellf_epoch_99.pth, a linux REST server is set to do inf
 Refer to the instruction of [TorchServe](https://github.com/pytorch/serve) and [Flask](https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html) to setup the environment. Or you can use the requirements.txt in the /linuxserver to install the packages.
 
 To load a trained model in the app.py, you need the model structure and the model parameters. 
-- The model structure is defined in a .py file, which has the pipeline of the model.
+- The model structure is defined in the pytorch_model.py file, which has the pipeline of the model.
 - The model parameters are the trained matrix that can be saved as .pth, .pt, .onnx files.
 
 To run a flask for remote connection: `flask run --host 0.0.0.0`
