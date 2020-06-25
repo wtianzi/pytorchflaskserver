@@ -1,0 +1,7 @@
+# Model:
+linuxserver
+/*.pth
+
+# Model2:
+*.pth
+
