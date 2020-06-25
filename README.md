@@ -10,10 +10,10 @@ To load a trained model in the app.py, you need the model structure and the mode
 - The model structure is defined in a .py file, which has the pipeline of the model.
 - The model parameters are the trained matrix that can be saved as .pth, .pt, .onnx files.
 
-To run a flask for remote connection: 'flask run --host 0.0.0.0"
+To run a flask for remote connection: `flask run --host 0.0.0.0`
 
 # Python client:
-'''python
+```python
 import requests
 test_url = 'http://serveripaddress:5000/predict'
 
@@ -32,8 +32,40 @@ resp = requests.post(test_url,files={"file": open('0.bmp','rb')})
 #print(json.loads(response.text))
 
 print(resp.json())
-''''
+```
 
+# C# client
+```c#
+public static void SendToModel(string folder, int index)
+{            
+    try
+    {
+        var t_time= DateTime.Now;
+        string filename = String.Format("{0}/{1}.bmp", folder, index);
+        var wb = new WebClient();
+        var response = wb.UploadFile(url, filename);
+        string responseInString = Encoding.UTF8.GetString(response);
+
+        m_sortedlist.Add(index , responseInString);
+        Console.WriteLine(String.Format("{0}: {1}, response time: {2}", index, responseInString, DateTime.Now - t_time));
+    }
+    catch
+    {
+        //check here why it failed and ask user to retry if the file is in use.
+        Console.WriteLine(String.Format("Catch---------------------{0}", index));
+        return ;
+    }
+    return ;
+}
+public static async Task SendAliveMessageAsync(string folder, int index)
+{
+    var task2 = Task.Factory.StartNew(() =>
+    {
+        SendToModel(folder, index);
+    });
+}
+
+```
 
 * Notes: 
 - my NVIDIA driver is old (NVIDIA 10010), so I use 'pip install torch==1.4.0+cu100 torchvision==0.5.0+cu100 -f https://download.pytorch.org/whl/torch_stable.html' to install the torch and torchvision.
@@ -43,4 +75,4 @@ print(resp.json())
 # About ML.net and .ONNX format
 ML.NET package enables the training and inference in c#. But currently, the ML.NET doesn't support 3D convTrans, which we need for this model, so we can't use the ML.NET.
 
-If you have a 1D or 2D model, we can use the setup below:
+If you have a 1D or 2D model, try the ML.NET NuGet Packages, use the detect object model. Makesure you change the class.
