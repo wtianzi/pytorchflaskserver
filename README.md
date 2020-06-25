@@ -1,9 +1,9 @@
-# pytorchflaskserver
+# Pytorchflaskserver
 Use PyTorch server and flask to serve a model inference calculation.
 
 Given a trained model modellf_epoch_99.pth, a linux REST server is set to do inference, while using python requests or c# WebClient to send the input images.
 
-# PyTorch server:
+## PyTorch server:
 Refer to the instruction of [TorchServe](https://github.com/pytorch/serve) and [Flask](https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html) to setup the environment. Or you can use the requirements.txt in the /linuxserver to install the packages.
 
 To load a trained model in the app.py, you need the model structure and the model parameters. 
@@ -12,7 +12,7 @@ To load a trained model in the app.py, you need the model structure and the mode
 
 To run a flask for remote connection: `flask run --host 0.0.0.0`
 
-# Python client:
+## Python client:
 ```python
 import requests
 test_url = 'http://serveripaddress:5000/predict'
@@ -34,7 +34,7 @@ resp = requests.post(test_url,files={"file": open('0.bmp','rb')})
 print(resp.json())
 ```
 
-# C# client
+## C# client
 ```c#
 public static void SendToModel(string folder, int index)
 {            
